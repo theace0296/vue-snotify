@@ -43,23 +43,7 @@ const tmpFolder = path.join(rootFolder, 'node_modules/.tmp');
 const distFolder = path.join(rootFolder, 'dist');
 const buildFolder = path.join(rootFolder, 'build');
 
-const tsConfigOverrides = {
-  declaration: true,
-  module: 'es2015',
-  target: 'es5',
-  baseUrl: '.',
-  stripInternal: true,
-  emitDecoratorMetadata: true,
-  experimentalDecorators: true,
-  noImplicitAny: false,
-  moduleResolution: 'node',
-  outDir: './build',
-  lib: ['es2015', 'dom'],
-  includes: ['src/snotify.d.ts'],
-  skipLibCheck: true,
-};
-
-const tsProject = ts.createProject({ ...tsConfigOverrides });
+const tsProject = ts.createProject('tsconfig.json');
 
 /**
  * Deletes the specified folderva
@@ -87,12 +71,12 @@ const getRollupOptions = (options = {}) => {
       },
     },
     plugins: [
-      typescript({
-        tsconfig: false,
-        include: ['**/*.ts'],
-        compilerOptions: { ...tsConfigOverrides },
+      typescript.default({
+        tsconfig: 'tsconfig.json',
+        typescript: require('typescript'),
+        tslib: require.resolve('tslib'),
       }),
-      vue({
+      vue.default({
         defaultLang: { script: 'ts' },
       }),
       node({
