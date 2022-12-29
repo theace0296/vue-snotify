@@ -9,65 +9,47 @@ export interface SnotifyToastConfig {
   /**
    * Toast custom id.
    */
-  id?: number | string;
+  id?: number | string
   /**
    * Toast timeout in milliseconds.
    * Disable timeout = 0
-   * @type {number}
-   * @default: 2000
    */
-  timeout?: number;
+  timeout?: number
   /**
    * Enable/Disable progress bar.
    * Disabled if timeout is 0.
-   * @type {boolean}
-   * @default true
    */
-  showProgressBar?: boolean;
+  showProgressBar?: boolean
   /**
    * Type of toast, affects toast style.
    * It's not recommended to change it.
    * Depends on toast type.
-   * @type {SnotifyType}
-   * @default SnotifyStyle.SIMPLE | SnotifyStyle.SUCCESS | SnotifyStyle. ERROR | SnotifyStyle.WARNING etc..
    */
-  type?: SnotifyType;
+  type?: SnotifyType
   /**
    * Should toast close on click?
-   * @type {boolean}
-   * @default true
    */
-  closeOnClick?: boolean;
+  closeOnClick?: boolean
   /**
    * Should timeout pause on hover?
-   * @type {boolean}
-   * @default true
    */
-  pauseOnHover?: boolean;
+  pauseOnHover?: boolean
   /**
    * Buttons config.
-   * @type {SnotifyButton[]}
-   * @default Look snotify button description
    */
-  buttons?: SnotifyButton[];
+  buttons?: SnotifyButton[]
   /**
    * Placeholder for Prompt toast
-   * @type {string}
-   * @default 'Enter answer here...'
    */
-  placeholder?: string;
+  placeholder?: string
   /**
    * Toast title maximum length
-   * @type {number}
-   * @default 16
    */
-  titleMaxLength?: number;
+  titleMaxLength?: number
   /**
    * Toast body maximum length
-   * @type {number}
-   * @default 150
    */
-  bodyMaxLength?: number;
+  bodyMaxLength?: number
   /**
    * Activate custom icon. | false - disable
    * You should provide full tag, e.g.
@@ -79,34 +61,24 @@ export interface SnotifyToastConfig {
    *     <g><path....../></g>
    * </svg>
    * ```
-   * @type {string}
-   * @default undefined
    */
-  icon?: string;
+  icon?: string
   /**
    * Backdrop opacity.
    * * **Range:** `0.0 - 1.0`.
    * * **Disabled:** `-1`
-   * @type {number}
-   * @default -1
    */
-  backdrop?: number;
+  backdrop?: number
   /**
    * Animation config
-   * @type {SnotifyAnimate}
-   * @default -1
    */
-  animation?: SnotifyAnimate;
+  animation?: SnotifyAnimate
   /**
    * Html string witch overrides toast content
-   * @type {string}
-   * @default null
    */
-  html?: string;
+  html?: string
   /**
    * Toasts position on screen
-   * @type {SnotifyPosition}
-   * @default SnotifyPosition.rightBottom
    */
-  position?: SnotifyPosition;
+  position?: SnotifyPosition
 }

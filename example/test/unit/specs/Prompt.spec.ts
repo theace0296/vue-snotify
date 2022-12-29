@@ -56,9 +56,9 @@ describe('Prompt Toast', () => {
       titleMaxLength: 1,
       buttons: [
         { text: 'Yes', action: (t) => {
-            expect(toast.id)
-              .toBe(t.id);
-            done();
+          expect(toast.id)
+            .toBe(t.id);
+          done();
         }},
       ]
     });

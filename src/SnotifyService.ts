@@ -1,6 +1,6 @@
-import Vue from 'vue';
+import mitt from 'mitt';
 import {SnotifyToast} from './components/toast.model';
-import {ToastDefaults} from './toastDefaults';
+import {TOAST_DEFAULTS} from './toastDefaults';
 import {SnotifyToastConfig, Snotify, SnotifyDefaults} from './interfaces';
 import {SnotifyStyle} from './enums';
 import {SnotifyType} from './types';
@@ -11,33 +11,29 @@ import {SetToastType} from './decorators/set-toast-type.decorator';
 /**
  * this - create, remove, config toasts
  */
-// tslint:disable:unified-signatures
 export class SnotifyService {
-   readonly emitter = new Vue();
-   notifications: SnotifyToast[] = [];
-   config: SnotifyDefaults = ToastDefaults;
+  readonly emitter = mitt();
+  notifications: SnotifyToast[] = [];
+  config: SnotifyDefaults = TOAST_DEFAULTS;
   /**
    * emit changes in notifications array
    */
-   emit(): void {
-    this.emitter.$emit('snotify', this.notifications.slice());
+  emit(): void {
+    this.emitter.emit('snotify', this.notifications.slice());
   }
 
   /**
    * returns SnotifyToast object
-   * @param id {Number}
-   * @return {SnotifyToast|undefined}
    */
-   get(id: number): SnotifyToast {
+  get(id: number): SnotifyToast | undefined {
     return this.notifications.find(toast => toast.id === id);
   }
 
   /**
    * add SnotifyToast to notifications array
-   * @param toast {SnotifyToast}
    */
-   add(toast: SnotifyToast): void {
-    if (this.config.global.newOnTop) {
+  add(toast: SnotifyToast): void {
+    if (this.config.global?.newOnTop) {
       this.notifications.unshift(toast);
     } else {
       this.notifications.push(toast);
@@ -47,91 +43,75 @@ export class SnotifyService {
 
   /**
    * If ID passed, emits toast animation remove, if ID & REMOVE passed, removes toast from notifications array
-   * @param id {number}
-   * @param remove {boolean}
    */
-   remove(id?: number| string, remove?: boolean): void {
+  remove(id?: number| string, remove?: boolean): void {
     if (!id) {
       return this.clear();
     } else if (remove) {
       this.notifications = this.notifications.filter(toast => toast.id !== id);
       return this.emit();
     }
-    this.emitter.$emit('remove', id);
+    this.emitter.emit('remove', id);
   }
 
   /**
    * Clear notifications array
    */
-   clear(): void {
+  clear(): void {
     this.notifications = [];
     this.emit();
   }
 
-  button(text: string, closeOnClick: boolean = true, action: (toast?: SnotifyToast) => void = null, bold: boolean = false) {
-     return {
-       text,
-       action: closeOnClick ? (toast: SnotifyToast) => {
-         action(toast);
-         this.remove(toast.id);
-       } : action,
-       bold
-     };
+  button(text: string, closeOnClick = true, action: (toast?: SnotifyToast) => void = () => undefined, bold = false) {
+    return {
+      text,
+      action: closeOnClick ? (toast: SnotifyToast) => {
+        action(toast);
+        this.remove(toast.id);
+      } : action,
+      bold
+    };
   }
 
   /**
    * Creates toast and add it to array, returns toast id
-   * @param snotify {Snotify}
-   * @return {number}
    */
-   create(snotify: Snotify): SnotifyToast {
-    if (this.config.global.oneAtTime && this.notifications.length !== 0) return;
-     if (this.config.global.preventDuplicates
-       && this.notifications.filter(t => t.config.type === snotify.config.type).length === 1) return;
+  create(snotify: Snotify): SnotifyToast | undefined {
+    if (this.config.global?.oneAtTime && this.notifications.length !== 0) return;
+    if (this.config.global?.preventDuplicates
+       && this.notifications.filter(t => t.config?.type === snotify.config?.type).length === 1) return;
     const config =
-      mergeDeep(this.config.toast, this.config.type[snotify.config.type], snotify.config) as SnotifyToastConfig;
+      mergeDeep(this.config.toast, this.config.type && snotify.config?.type ? this.config.type[snotify.config.type] : undefined, snotify.config) as SnotifyToastConfig;
     const toast = new SnotifyToast(
       config.id ? config.id : uuid(),
-      snotify.title,
-      snotify.body,
+      snotify.title ?? '',
+      snotify.body ?? '',
       config
     );
     this.add(toast);
     return toast;
   }
 
-   setDefaults(defaults: SnotifyDefaults): SnotifyDefaults {
+  setDefaults(defaults: SnotifyDefaults): SnotifyDefaults {
     return this.config = mergeDeep(this.config, defaults) as SnotifyDefaults;
   }
 
   /**
    * Create toast with simple style returns toast id;
-   * @param body {String}
-   * @returns {number}
    */
-   simple(body: string): SnotifyToast;
+  simple(body: string): SnotifyToast | undefined;
   /**
    * Create toast with simple style returns toast id;
-   * @param body {String}
-   * @param title {String}
-   * @returns {number}
    */
-   simple(body: string, title: string): SnotifyToast;
+  simple(body: string, title: string): SnotifyToast | undefined;
   /**
    * Create toast with simple style returns toast id;
-   * @param body {String}
-   * @param config {SnotifyToastConfig}
-   * @returns {number}
    */
-   simple(body: string, config: SnotifyToastConfig): SnotifyToast;
+  simple(body: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Create toast with simple style  returns toast id;
-   * @param [body] {String}
-   * @param [title] {String}
-   * @param [config] {SnotifyToastConfig}
-   * @returns {number}
    */
-   simple(body: string, title: string, config: SnotifyToastConfig): SnotifyToast;
+  simple(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -140,38 +120,26 @@ export class SnotifyService {
    * Determines current toast type and collects default configuration
    */
   @SetToastType
-   simple(args: any): SnotifyToast {
+  simple(args) {
     return this.create(args);
   }
 
   /**
    * Create toast with success style returns toast id;
-   * @param body {String}
-   * @returns {number}
    */
-   success(body: string): SnotifyToast;
+  success(body: string): SnotifyToast | undefined;
   /**
    * Create toast with success style returns toast id;
-   * @param body {String}
-   * @param title {String}
-   * @returns {number}
    */
-   success(body: string, title: string): SnotifyToast;
+  success(body: string, title: string): SnotifyToast | undefined;
   /**
    * Create toast with success style returns toast id;
-   * @param body {String}
-   * @param config {SnotifyToastConfig}
-   * @returns {number}
    */
-   success(body: string, config: SnotifyToastConfig): SnotifyToast;
+  success(body: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Create toast with success style  returns toast id;
-   * @param [body] {String}
-   * @param [title] {String}
-   * @param [config] {SnotifyToastConfig}
-   * @returns {number}
    */
-   success(body: string, title: string, config: SnotifyToastConfig): SnotifyToast;
+  success(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -180,38 +148,26 @@ export class SnotifyService {
    * Determines current toast type and collects default configuration
    */
   @SetToastType
-   success(args: any): SnotifyToast {
+  success(args) {
     return this.create(args);
   }
 
   /**
    * Create toast with error style returns toast id;
-   * @param body {String}
-   * @returns {number}
    */
-   error(body: string): SnotifyToast;
+  error(body: string): SnotifyToast | undefined;
   /**
    * Create toast with error style returns toast id;
-   * @param body {String}
-   * @param title {String}
-   * @returns {number}
    */
-   error(body: string, title: string): SnotifyToast;
+  error(body: string, title: string): SnotifyToast | undefined;
   /**
    * Create toast with error style returns toast id;
-   * @param body {String}
-   * @param config {SnotifyToastConfig}
-   * @returns {number}
    */
-   error(body: string, config: SnotifyToastConfig): SnotifyToast;
+  error(body: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Create toast with error style  returns toast id;
-   * @param [body] {String}
-   * @param [title] {String}
-   * @param [config] {SnotifyToastConfig}
-   * @returns {number}
    */
-   error(body: string, title: string, config: SnotifyToastConfig): SnotifyToast;
+  error(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -220,38 +176,26 @@ export class SnotifyService {
    * Determines current toast type and collects default configuration
    */
   @SetToastType
-   error(args: any): SnotifyToast {
+  error(args) {
     return this.create(args);
   }
 
   /**
    * Create toast with info style returns toast id;
-   * @param body {String}
-   * @returns {number}
    */
-   info(body: string): SnotifyToast;
+  info(body: string): SnotifyToast | undefined;
   /**
    * Create toast with info style returns toast id;
-   * @param body {String}
-   * @param title {String}
-   * @returns {number}
    */
-   info(body: string, title: string): SnotifyToast;
+  info(body: string, title: string): SnotifyToast | undefined;
   /**
    * Create toast with info style returns toast id;
-   * @param body {String}
-   * @param config {SnotifyToastConfig}
-   * @returns {number}
    */
-   info(body: string, config: SnotifyToastConfig): SnotifyToast;
+  info(body: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Create toast with info style  returns toast id;
-   * @param [body] {String}
-   * @param [title] {String}
-   * @param [config] {SnotifyToastConfig}
-   * @returns {number}
    */
-   info(body: string, title: string, config: SnotifyToastConfig): SnotifyToast;
+  info(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -260,38 +204,26 @@ export class SnotifyService {
    * Determines current toast type and collects default configuration
    */
   @SetToastType
-   info(args: any): SnotifyToast {
+  info(args) {
     return this.create(args);
   }
 
   /**
    * Create toast with warning style returns toast id;
-   * @param body {String}
-   * @returns {number}
    */
-   warning(body: string): SnotifyToast;
+  warning(body: string): SnotifyToast | undefined;
   /**
    * Create toast with warning style returns toast id;
-   * @param body {String}
-   * @param title {String}
-   * @returns {number}
    */
-   warning(body: string, title: string): SnotifyToast;
+  warning(body: string, title: string): SnotifyToast | undefined;
   /**
    * Create toast with warning style returns toast id;
-   * @param body {String}
-   * @param config {SnotifyToastConfig}
-   * @returns {number}
    */
-   warning(body: string, config: SnotifyToastConfig): SnotifyToast;
+  warning(body: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Create toast with warning style  returns toast id;
-   * @param [body] {String}
-   * @param [title] {String}
-   * @param [config] {SnotifyToastConfig}
-   * @returns {number}
    */
-   warning(body: string, title: string, config: SnotifyToastConfig): SnotifyToast;
+  warning(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -300,38 +232,26 @@ export class SnotifyService {
    * Determines current toast type and collects default configuration
    */
   @SetToastType
-   warning(args: any): SnotifyToast {
+  warning(args) {
     return this.create(args);
   }
 
   /**
    * Create toast with confirm style returns toast id;
-   * @param body {String}
-   * @returns {number}
    */
-   confirm(body: string): SnotifyToast;
+  confirm(body: string): SnotifyToast | undefined;
   /**
    * Create toast with confirm style returns toast id;
-   * @param body {String}
-   * @param title {String}
-   * @returns {number}
    */
-   confirm(body: string, title: string): SnotifyToast;
+  confirm(body: string, title: string): SnotifyToast | undefined;
   /**
    * Create toast with confirm style returns toast id;
-   * @param body {String}
-   * @param config {SnotifyToastConfig}
-   * @returns {number}
    */
-   confirm(body: string, config: SnotifyToastConfig): SnotifyToast;
+  confirm(body: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Create toast with confirm style  returns toast id;
-   * @param [body] {String}
-   * @param [title] {String}
-   * @param [config] {SnotifyToastConfig}
-   * @returns {number}
    */
-   confirm(body: string, title: string, config: SnotifyToastConfig): SnotifyToast;
+  confirm(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -340,38 +260,26 @@ export class SnotifyService {
    * Determines current toast type and collects default configuration
    */
   @SetToastType
-   confirm(args: any): SnotifyToast {
+  confirm(args) {
     return this.create(args);
   }
 
   /**
    * Create toast with Prompt style {with two buttons}, returns toast id;
-   * @param body {String}
-   * @returns {number}
    */
-   prompt(body: string): SnotifyToast;
+  prompt(body: string): SnotifyToast | undefined;
   /**
    * Create toast with Prompt style {with two buttons}, returns toast id;
-   * @param body {String}
-   * @param title {String}
-   * @returns {number}
    */
-   prompt(body: string, title: string): SnotifyToast;
+  prompt(body: string, title: string): SnotifyToast | undefined;
   /**
    * Create toast with Prompt style {with two buttons}, returns toast id;
-   * @param body {String}
-   * @param config {SnotifyToastConfig}
-   * @returns {number}
    */
-   prompt(body: string, config: SnotifyToastConfig): SnotifyToast;
+  prompt(body: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Create toast with Prompt style {with two buttons}, returns toast id;
-   * @param [body] {String}
-   * @param [title] {String}
-   * @param [config] {SnotifyToastConfig}
-   * @returns {number}
    */
-   prompt(body: string, title: string, config: SnotifyToastConfig): SnotifyToast;
+  prompt(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -380,42 +288,26 @@ export class SnotifyService {
    * Determines current toast type and collects default configuration
    */
   @SetToastType
-   prompt(args: any): SnotifyToast {
+  prompt(args) {
     return this.create(args);
   }
 
   /**
    * Creates async toast with Info style. Pass action, and resolve or reject it.
-   * @param body {String}
-   * @param action {() => Promise<Snotify>}
-   * @returns {number}
    */
-   async(body: string, action: () => Promise<Snotify>): SnotifyToast;
+  async(body: string, action: () => Promise<Snotify>): SnotifyToast | undefined;
   /**
    * Creates async toast with Info style. Pass action, and resolve or reject it.
-   * @param body {String}
-   * @param title {String}
-   * @param action {() => Promise<Snotify>}
-   * @returns {number}
    */
-   async(body: string, title: string, action: () => Promise<Snotify>): SnotifyToast;
+  async(body: string, title: string, action: () => Promise<Snotify>): SnotifyToast | undefined;
   /**
    * Creates async toast with Info style. Pass action, and resolve or reject it.
-   * @param body {String}
-   * @param action {() => Promise<Snotify>}
-   * @param [config] {SnotifyToastConfig}
-   * @returns {number}
    */
-   async(body: string, action: () => Promise<Snotify>, config: SnotifyToastConfig): SnotifyToast;
+  async(body: string, action: () => Promise<Snotify>, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Creates async toast with Info style. Pass action, and resolve or reject it.
-   * @param body {String}
-   * @param title {String}
-   * @param action {() => Promise<Snotify>}
-   * @param [config] {SnotifyToastConfig}
-   * @returns {number}
    */
-   async(body: string, title: string, action: () => Promise<Snotify>, config: SnotifyToastConfig): SnotifyToast;
+  async(body: string, title: string, action: () => Promise<Snotify>, config: SnotifyToastConfig): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -424,51 +316,48 @@ export class SnotifyService {
    * Determines current toast type and collects default configuration
    */
   @SetToastType
-   async(args: any): SnotifyToast {
-    let async = args.action;
-
+  async(args) {
+    const async = args.action;
     const toast = this.create(args);
-
-    toast.on('mounted',
+    toast?.on('mounted',
       () => {
-      async()
-        .then((next: Snotify) => this.mergeToast(toast, next, SnotifyStyle.success))
-        .catch((error?: Snotify) => this.mergeToast(toast, error, SnotifyStyle.error));
+        async()
+          .then((next: Snotify) => this.mergeToast(toast, next, SnotifyStyle.success))
+          .catch((error?: Snotify) => this.mergeToast(toast, error, SnotifyStyle.error));
       }
     );
 
     return toast;
   }
 
-   mergeToast(toast, next, type?: SnotifyType) {
-    if (next.body) {
+  mergeToast(toast: Snotify, next: Snotify | undefined, type?: SnotifyType) {
+    if (next?.body) {
       toast.body = next.body;
     }
-    if (next.title) {
+    if (next?.title) {
       toast.title = next.title;
     }
-    if (type) {
-      toast.config = mergeDeep(toast.config, this.config.global, this.config.toast[type], {type}, next.config);
-    } else {
-      toast.config = mergeDeep(toast.config, next.config);
+    if (next?.config) {
+      if (type) {
+        toast.config = mergeDeep(toast.config, this.config.global, this.config.toast?.[type], {type}, next.config);
+      } else {
+        toast.config = mergeDeep(toast.config, next.config);
+      }
     }
-    if (next.html) {
+    if (next?.html && toast.config) {
       toast.config.html = next.html;
     }
     this.emit();
-    this.emitter.$emit('toastChanged', toast);
+    this.emitter.emit('toastChanged', toast);
   }
 
   /**
    * Creates empty toast with html string inside
-   * @param {string} html
-   * @param {SnotifyToastConfig} config
-   * @returns {number}
    */
-   html(html: string, config?: SnotifyToastConfig): SnotifyToast {
+  html(html: string, config?: SnotifyToastConfig): SnotifyToast | undefined {
     return this.create({
-      title: null,
-      body: null,
+      title: undefined,
+      body: undefined,
       config: {
         ...config,
         ...{html}

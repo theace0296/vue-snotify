@@ -1,11 +1,11 @@
-const path = require('path')
-const config = require('../config')
+const path = require('path');
+const config = require('../config');
 
 exports.assetsPath = function (_path) {
   const assetsSubDirectory = process.env.NODE_ENV === 'production'
     ? config.build.assetsSubDirectory
     : config.dev.assetsSubDirectory;
-  return path.posix.join(assetsSubDirectory, _path)
+  return path.posix.join(assetsSubDirectory, _path);
 };
 
 exports.cssLoaders = function (options) {
@@ -28,12 +28,12 @@ exports.cssLoaders = function (options) {
         options: Object.assign({}, loaderOptions, {
           sourceMap: options.sourceMap
         })
-      })
+      });
     }
 
     // Extract CSS when that option is specified
     // (which is the case during production build)
-    return ['style-loader'].concat(loaders)
+    return ['style-loader'].concat(loaders);
   }
 
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
@@ -41,24 +41,24 @@ exports.cssLoaders = function (options) {
     css: generateLoaders(),
     postcss: generateLoaders(),
     scss: generateLoaders('sass'),
-  }
-}
+  };
+};
 
 // Generate loaders for standalone style files (outside of .vue)
 exports.styleLoaders = function (options) {
-  const output = []
-  const loaders = exports.cssLoaders(options)
+  const output = [];
+  const loaders = exports.cssLoaders(options);
   for (const extension in loaders) {
-    const loader = loaders[extension]
+    const loader = loaders[extension];
     output.push({
       test: new RegExp('\\.' + extension + '$'),
       use: loader
-    })
+    });
   }
-  return output
+  return output;
 };
 
 // Require JSON without extension
 exports.requireJSON = function (filePath) {
-  return JSON.parse(require('fs').readFileSync(path.join(__dirname, '..', filePath), "utf8"));
+  return JSON.parse(require('fs').readFileSync(path.join(__dirname, '..', filePath), 'utf8'));
 };

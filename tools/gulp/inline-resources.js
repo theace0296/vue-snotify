@@ -5,8 +5,6 @@
 const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
-const sass = require('node-sass');
-const tildeImporter = require('node-sass-tilde-importer');
 
 /**
  * Simple Promiseify function that takes a Node API and return a version that supports promises.

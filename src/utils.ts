@@ -1,6 +1,5 @@
 /**
  * Generates random id
- * @return {number}
  */
 export function uuid(): number {
   return Math.floor(Math.random() * (Date.now() - 1)) + 1;
@@ -8,20 +7,17 @@ export function uuid(): number {
 
 /**
  * Simple is object check.
- * @param item {Object<any>}
- * @returns {boolean}
  */
-export function isObject(item): boolean {
-  return (item && typeof item === 'object' && !Array.isArray(item) && item !== null);
+export function isObject(item: unknown): boolean {
+  if (item && typeof item === 'object' && !Array.isArray(item) && item !== null) return true;
+  return false;
 }
 
 /**
  * Deep merge objects.
- * @param sources {Array<Object<any>>}
- * @returns {Object<any>}
  */
 
-export function mergeDeep(...sources) {
+export function mergeDeep(...sources: (object | undefined)[]) {
   const target = {};
   if (!sources.length) {
     return target;

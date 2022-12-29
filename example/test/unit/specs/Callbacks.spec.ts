@@ -12,17 +12,17 @@ describe('Success Toast', () => {
   it('beforeShow toast', (done) => {
     vm.$snotify.prompt('test')
       .on('beforeShow', (toast) => {
-      expect(toast.body).toEqual('test');
-      done();
-    });
+        expect(toast.body).toEqual('test');
+        done();
+      });
   });
 
   it('mounted toast', (done) => {
     vm.$snotify.prompt('test')
       .on('mounted', (toast) => {
-      expect(toast.body).toEqual('test');
-      done();
-    });
+        expect(toast.body).toEqual('test');
+        done();
+      });
   });
 
   it('beforeHide toast', (done) => {
@@ -30,9 +30,9 @@ describe('Success Toast', () => {
       closeOnClick: true,
     })
       .on('beforeHide', (toast) => {
-      expect(toast.body).toEqual('test');
-      done();
-    });
+        expect(toast.body).toEqual('test');
+        done();
+      });
 
     vm.$nextTick(() => {
       const node: HTMLInputElement = vm.$el.querySelector('.snotify.snotify-rightBottom .snotifyToast.snotify-prompt');
@@ -44,9 +44,9 @@ describe('Success Toast', () => {
   it('click toast', (done) => {
     vm.$snotify.prompt('test')
       .on('click', (toast) => {
-      expect(toast.body).toEqual('test');
-      done();
-    });
+        expect(toast.body).toEqual('test');
+        done();
+      });
     vm.$nextTick(() => {
       const node: HTMLInputElement = vm.$el.querySelector('.snotify.snotify-rightBottom .snotifyToast.snotify-prompt');
       const event = new Event('click');
@@ -60,9 +60,9 @@ describe('Success Toast', () => {
       closeOnClick: true
     })
       .on('destroyed', (toast) => {
-      expect(toast.body).toEqual('test');
-      done();
-    });
+        expect(toast.body).toEqual('test');
+        done();
+      });
     vm.$nextTick(() => {
       const node: HTMLInputElement = vm.$el.querySelector('.snotify.snotify-rightBottom .snotifyToast.snotify-prompt');
       const event = new Event('click');
@@ -88,9 +88,9 @@ describe('Success Toast', () => {
   it('input toast', (done) => {
     vm.$snotify.prompt('test')
       .on('input', (toast) => {
-      expect(toast.value).toEqual('Hello');
-      done();
-    });
+        expect(toast.value).toEqual('Hello');
+        done();
+      });
     vm.$nextTick(() => {
       const node: HTMLInputElement = vm.$el.querySelector('.snotify.snotify-rightBottom .snotifyToast.snotify-prompt input');
       node.value = 'Hello';
@@ -102,9 +102,9 @@ describe('Success Toast', () => {
   it('mouseenter toast', (done) => {
     vm.$snotify.prompt('test')
       .on('mouseenter', (toast) => {
-      expect(toast.body).toEqual('test');
-      done();
-    });
+        expect(toast.body).toEqual('test');
+        done();
+      });
     vm.$nextTick(() => {
       const node: HTMLInputElement = vm.$el.querySelector('.snotify.snotify-rightBottom .snotifyToast.snotify-prompt');
       const event = new Event('mouseenter');
@@ -115,9 +115,9 @@ describe('Success Toast', () => {
   it('mouseleave toast', (done) => {
     vm.$snotify.prompt('test')
       .on('mouseleave', (toast) => {
-      expect(toast.body).toEqual('test');
-      done();
-    });
+        expect(toast.body).toEqual('test');
+        done();
+      });
     vm.$nextTick(() => {
       const node: HTMLInputElement = vm.$el.querySelector('.snotify.snotify-rightBottom .snotifyToast.snotify-prompt');
       const event = new Event('mouseleave');

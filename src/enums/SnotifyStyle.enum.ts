@@ -2,7 +2,7 @@ import {SnotifyStyles} from '../interfaces';
 /**
  * Toast style.
  */
-export const SnotifyStyle: SnotifyStyles = {
+export const SNOTIFY_STYLE: SnotifyStyles = {
   simple: 'simple',
   success: 'success',
   error: 'error',

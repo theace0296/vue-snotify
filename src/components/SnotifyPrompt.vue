@@ -6,16 +6,16 @@
            @focus="isPromptFocused = true"
            @blur="isPromptFocused = !!toast.value.length"/>
     <label class="snotifyToast__input__label" :for="toast.id">
-      <span class="snotifyToast__input__labelContent">{{toast.config.placeholder | truncate}}</span>
+      <span class="snotifyToast__input__labelContent">{{truncate(toast.config.placeholder)}}</span>
     </label>
   </span>
 
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
+  import { defineComponent } from 'vue';
 
-  export default Vue.extend({
+  export default defineComponent({
     props: ['toast'],
     data() {
       return {
@@ -26,6 +26,9 @@
       valueChanged (e) {
         this.toast.value = e.target.value;
         this.toast.eventEmitter.$emit('input');
+      },
+      truncate (value: string, limit = 40, trail = '...') {
+        return value.length > limit ? value.substring(0, limit) + trail : value
       }
     }
   })

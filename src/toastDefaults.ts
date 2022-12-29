@@ -1,10 +1,10 @@
 import {SnotifyPosition, SnotifyStyle} from './enums';
+import { SnotifyDefaults } from './interfaces';
 
 /**
  * Snotify default configuration object
- * @type {SnotifyDefaults}
  */
-export const ToastDefaults = {
+export const TOAST_DEFAULTS = {
   global: {
     newOnTop: true,
     maxOnScreen: 8,
@@ -22,7 +22,7 @@ export const ToastDefaults = {
     titleMaxLength: 16,
     backdrop: -1,
     icon: undefined,
-    html: null,
+    html: undefined,
     position: SnotifyPosition.rightBottom,
     animation: {enter: 'fadeIn', exit: 'fadeOut', time: 400}
   },
@@ -69,4 +69,4 @@ export const ToastDefaults = {
       type: SnotifyStyle.async
     }
   }
-};
+} as SnotifyDefaults;

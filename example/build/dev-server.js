@@ -1,10 +1,9 @@
-const { resolve } = require('path');
-const chokidar = require('chokidar')
+const chokidar = require('chokidar');
 require('./check-versions')();
 
 const config = require('../config');
 if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
+  process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV);
 }
 
 const opn = require('opn');
@@ -12,9 +11,10 @@ const path = require('path');
 const express = require('express');
 const webpack = require('webpack');
 const proxyMiddleware = require('http-proxy-middleware');
-const webpackConfig = (process.env.NODE_ENV === 'testing' || process.env.NODE_ENV === 'production')
-  ? require('./webpack.prod.conf')
-  : require('./webpack.dev.conf');
+const webpackConfig =
+  process.env.NODE_ENV === 'testing' || process.env.NODE_ENV === 'production'
+    ? require('./webpack.prod.conf')
+    : require('./webpack.dev.conf');
 
 // default port where dev server listens for incoming traffic
 const port = process.env.PORT || config.dev.port;
@@ -29,45 +29,49 @@ const compiler = webpack(webpackConfig);
 
 const devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
-  quiet: true
+  quiet: true,
 });
 
 const hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: false,
-  heartbeat: 2000
+  heartbeat: 2000,
 });
 
 // force page reload when html-webpack-plugin template changes
 compiler.plugin('compilation', function (compilation) {
   compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
     hotMiddleware.publish({ action: 'reload' });
-    cb()
-  })
-});
-
-//force reload on src changes
-const watcher = chokidar.watch([
-  resolve(__dirname, '../../node_modules/vue-snotify'),// index.html is on the root folder
-]);
-watcher.on('ready', function() {
-  console.log(resolve(__dirname, '../../node_modules/vue-snotify'))
-  console.log(`Initial scan complete. Ready for changes on [${resolve(__dirname, '../../node_modules/vue-snotify')}]`);
-});
-watcher.on('change', function(path) {
-  console.log('File [' + path + '] changed !');
-  compiler.run(() => {
-    console.log('vue-snotify recompiled')
+    cb();
   });
 });
 
+// force reload on src changes
+const watcher = chokidar.watch([
+  path.resolve(__dirname, '../../node_modules/vue-snotify'), // index.html is on the root folder
+]);
+watcher.on('ready', function () {
+  console.log(path.resolve(__dirname, '../../node_modules/vue-snotify'));
+  console.log(
+    `Initial scan complete. Ready for changes on [${path.resolve(
+      __dirname,
+      '../../node_modules/vue-snotify'
+    )}]`
+  );
+});
+watcher.on('change', function (path) {
+  console.log('File [' + path + '] changed !');
+  compiler.run(() => {
+    console.log('vue-snotify recompiled');
+  });
+});
 
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
-  var options = proxyTable[context]
+  let options = proxyTable[context];
   if (typeof options === 'string') {
-    options = { target: options }
+    options = { target: options };
   }
-  app.use(proxyMiddleware(options.filter || context, options))
+  app.use(proxyMiddleware(options.filter || context, options));
 });
 
 // handle fallback for HTML5 history API
@@ -81,24 +85,27 @@ app.use(devMiddleware);
 app.use(hotMiddleware);
 
 // serve pure static assets
-const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
+const staticPath = path.posix.join(
+  config.dev.assetsPublicPath,
+  config.dev.assetsSubDirectory
+);
 app.use(staticPath, express.static('./static'));
 
 const uri = 'http://localhost:' + port;
 
-let _resolve;
-const readyPromise = new Promise(resolve => {
-  _resolve = resolve
+let resolve;
+const readyPromise = new Promise((res) => {
+  resolve = res;
 });
 
 console.log('> Starting dev server...');
 devMiddleware.waitUntilValid(() => {
-  console.log('> Listening at ' + uri + '\n')
+  console.log('> Listening at ' + uri + '\n');
   // when env is testing, don't need open it
   if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
-    opn(uri)
+    opn(uri);
   }
-  _resolve()
+  resolve();
 });
 
 const server = app.listen(port);
@@ -106,6 +113,6 @@ const server = app.listen(port);
 module.exports = {
   ready: readyPromise,
   close: () => {
-    server.close()
-  }
+    server.close();
+  },
 };

@@ -6,21 +6,18 @@ import {SnotifyToastConfig} from '.';
 export interface Snotify {
   /**
    * Toast Title
-   * @type {string}
    */
-  title?: string;
+  title?: string
   /**
    * Toast message
-   * @type {string}
    */
-  body?: string;
+  body?: string
   /**
    * Config object
-   * @type {SnotifyToastConfig}
    */
-  config?: SnotifyToastConfig;
+  config?: SnotifyToastConfig
   /**
    * Html content
    */
-  html?: string;
+  html?: string
 }

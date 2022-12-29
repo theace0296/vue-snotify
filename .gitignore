@@ -43,3 +43,7 @@ selenium-debug.log
 *.suo
 *.ntvs*
 *.njsproj
+
+.tmp/*
+build/*
+demo-example/*

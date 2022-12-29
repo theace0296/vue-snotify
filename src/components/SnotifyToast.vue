@@ -16,8 +16,8 @@
       <span class="snotifyToast__progressBar__percentage" :style="{'width': (state.progress * 100) + '%'}"></span>
     </div>
     <div class="snotifyToast__inner" v-if="!toast.config.html" :class="{'snotifyToast__noIcon': toast.config.icon === false}">
-      <div class="snotifyToast__title" v-if="toast.title">{{toast.title | truncate(toast.config.titleMaxLength)}}</div>
-      <div class="snotifyToast__body" v-if="toast.body">{{toast.body | truncate(toast.config.bodyMaxLength)}}</div>
+      <div class="snotifyToast__title" v-if="toast.title">{{truncate(toast.title, toast.config.titleMaxLength)}}</div>
+      <div class="snotifyToast__body" v-if="toast.body">{{truncate(toast.body, toast.config.bodyMaxLength)}}</div>
       <snotify-prompt v-if="toast.config.type === state.promptType" :toast="toast"/>
       <div v-if="typeof toast.config.icon === 'undefined'" :class="['snotify-icon', 'snotify-icon--' + toast.config.type]"></div>
       <div v-else-if="toast.config.icon !== false">
@@ -31,12 +31,12 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
+  import { defineComponent } from 'vue';
   import SnotifyPrompt from './SnotifyPrompt.vue';
   import SnotifyButton from './SnotifyButton.vue';
   import {SnotifyStyle} from '../enums';
 
-  export default Vue.extend({
+  export default defineComponent({
     props: ['toastData'],
     components: {
       SnotifyPrompt,
@@ -95,8 +95,6 @@
       },
       /**
        * Start progress bar
-       * @param startTime {number}
-       * @default 0
        */
       startTimeout(startTime = 0) {
         const start = performance.now();
@@ -132,6 +130,9 @@
           this.toast.eventEmitter.$emit('hidden');
           setTimeout(() => this.$snotify.remove(this.toast.id, true), this.toast.config.animation.time / 2);
         }, this.toast.config.animation.time / 2);
+      },
+      truncate (value: string, limit = 40, trail = '...') {
+        return value.length > limit ? value.substring(0, limit) + trail : value
       },
     },
 

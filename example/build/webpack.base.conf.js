@@ -1,12 +1,13 @@
 const path = require('path');
 const utils = require('./utils');
 const config = require('../config');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const { VueLoaderPlugin } = require('vue-loader');
 const tsConfigFile =
-  process.env.NODE_ENV === 'development' ? 'tsconfig.dev.json' : 'tsconfig.json'
+  process.env.NODE_ENV === 'development' ? 'tsconfig.dev.json' : 'tsconfig.prod.json';
 
 function resolve (dir) {
-  return path.join(__dirname, '..', dir)
+  return path.join(__dirname, '..', dir);
 }
 
 module.exports = {
@@ -52,7 +53,7 @@ module.exports = {
       {
         test: /\.html$/,
         loader: 'raw-loader',
-        exclude: ['./example/index.html']
+        exclude: [path.resolve('./example/index.html')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

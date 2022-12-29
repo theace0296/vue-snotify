@@ -5,7 +5,7 @@ import { Component } from 'vue-property-decorator';
 import './app.scss';
 
 @Component({
-    template: require('./app.html')
+  template: require('./app.html')
 })
 export class App extends Vue {
   style = 'material';
@@ -50,16 +50,36 @@ export class App extends Vue {
   }
 
   mapCallbacks(toast: SnotifyToast) {
-    toast.on('beforeShow', (toast) => { console.log(`${toast.title} - beforeShow`); });
-    toast.on('mounted', (toast) => { console.log(`${toast.title} - mounted`); });
-    toast.on('shown', (toast) => { console.log(`${toast.title} - shown`); });
-    toast.on('beforeHide', (toast) => { console.log(`${toast.title} - beforeHide`); });
-    toast.on('click', (toast) => { console.log(`${toast.title} - click`); });
-    toast.on('destroyed', (toast) => { console.log(`${toast.title} - destroyed`); });
-    toast.on('hidden', (toast) => { console.log(`${toast.title} - hidden`); });
-    toast.on('input', (toast) => { console.log(`${toast.title} - input`); });
-    toast.on('mouseenter', (toast) => { console.log(`${toast.title} - mouseenter`); });
-    toast.on('mouseleave', (toast) => { console.log(`${toast.title} - mouseleave`); });
+    toast.on('beforeShow', (toast) => {
+      console.log(`${toast.title} - beforeShow`); 
+    });
+    toast.on('mounted', (toast) => {
+      console.log(`${toast.title} - mounted`); 
+    });
+    toast.on('shown', (toast) => {
+      console.log(`${toast.title} - shown`); 
+    });
+    toast.on('beforeHide', (toast) => {
+      console.log(`${toast.title} - beforeHide`); 
+    });
+    toast.on('click', (toast) => {
+      console.log(`${toast.title} - click`); 
+    });
+    toast.on('destroyed', (toast) => {
+      console.log(`${toast.title} - destroyed`); 
+    });
+    toast.on('hidden', (toast) => {
+      console.log(`${toast.title} - hidden`); 
+    });
+    toast.on('input', (toast) => {
+      console.log(`${toast.title} - input`); 
+    });
+    toast.on('mouseenter', (toast) => {
+      console.log(`${toast.title} - mouseenter`); 
+    });
+    toast.on('mouseleave', (toast) => {
+      console.log(`${toast.title} - mouseleave`); 
+    });
   }
   onSuccess() {
     const toast = this.$snotify.success(this.body, this.title, this.getConfig());
@@ -77,7 +97,7 @@ export class App extends Vue {
   onSimple() {
 
     // const icon = `assets/custom-svg.svg`;
-    const icon = `https://placehold.it/48x100`;
+    const icon = 'https://placehold.it/48x100';
 
     this.$snotify.simple(this.body, this.title, {
       ...this.getConfig(),
@@ -126,8 +146,12 @@ export class App extends Vue {
       buttons: [
         {text: 'Yes', action: () => console.log('Clicked: Yes'), bold: false},
         {text: 'No', action: () => console.log('Clicked: No') },
-        {text: 'Later', action: (toast) => {console.log('Clicked: Later'); this.$snotify.remove(toast.id); } },
-        {text: 'Close', action: (toast) => {console.log('Clicked: Close'); this.$snotify.remove(toast.id); }, bold: true, className: 'btn-cool'},
+        {text: 'Later', action: (toast) => {
+          console.log('Clicked: Later'); this.$snotify.remove(toast.id); 
+        } },
+        {text: 'Close', action: (toast) => {
+          console.log('Clicked: Close'); this.$snotify.remove(toast.id); 
+        }, bold: true, className: 'btn-cool'},
       ]
     });
     this.mapCallbacks(toast);
@@ -144,7 +168,9 @@ export class App extends Vue {
       ...config,
       buttons: [
         {text: 'Yes', action: (toast) => console.log('Said Yes: ' + toast.value) },
-        {text: 'No', action: (toast) => { console.log('Said No: ' + toast.value); this.$snotify.remove(toast.id); }},
+        {text: 'No', action: (toast) => {
+          console.log('Said No: ' + toast.value); this.$snotify.remove(toast.id); 
+        }},
       ],
       placeholder: 'Enter "ng-snotify" to validate this input' // Max-length = 40
     }).on('input', (toast) => {
