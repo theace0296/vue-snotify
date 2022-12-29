@@ -24,19 +24,19 @@
     /**
     * Helper for slice pipe (maxOnScreen)
     */
-    dockSize_a: number;
+    dockSize_a: number | undefined;
     /**
     * Helper for slice pipe (maxOnScreen)
     */
-    dockSize_b: number;
+    dockSize_b: number | undefined;
     /**
     * Helper for slice pipe (maxAtPosition)
     */
-    blockSize_a: number;
+    blockSize_a: number | undefined;
     /**
     * Helper for slice pipe (maxAtPosition)
     */
-    blockSize_b: number;
+    blockSize_b: number | undefined;
     /**
     * Backdrop Opacity
     */
@@ -97,17 +97,17 @@
     },
     methods: {
       setOptions(toasts: SnotifyToast[]): void {
-        if (this.$snotify.config.global.newOnTop) {
-          this.dockSize_a = -this.$snotify.config.global.maxOnScreen;
+        if (this.$snotify.config?.global?.newOnTop) {
+          this.dockSize_a = this.$snotify.config?.global?.maxOnScreen ? -this.$snotify.config?.global?.maxOnScreen : undefined;
           this.dockSize_b = undefined;
-          this.blockSize_a = -this.$snotify.config.global.maxAtPosition;
+          this.blockSize_a = this.$snotify.config?.global?.maxAtPosition ? -this.$snotify.config?.global?.maxAtPosition : undefined;
           this.blockSize_b = undefined;
           this.withBackdrop = toasts.filter(toast => toast.config?.backdrop && toast.config.backdrop >= 0);
         } else {
           this.dockSize_a = 0;
-          this.dockSize_b = this.$snotify.config.global.maxOnScreen;
+          this.dockSize_b = this.$snotify.config?.global?.maxOnScreen;
           this.blockSize_a = 0;
-          this.blockSize_b = this.$snotify.config.global.maxAtPosition;
+          this.blockSize_b = this.$snotify.config?.global?.maxAtPosition;
           this.withBackdrop = toasts.filter(toast => toast.config?.backdrop && toast.config.backdrop >= 0).reverse();
         }
         this.notifications = this.splitToasts(toasts.slice(this.dockSize_a, this.dockSize_b));
@@ -132,7 +132,7 @@
             }
             break;
           case 'beforeShow':
-            this.backdrop = this.withBackdrop[this.withBackdrop.length - 1].config.backdrop;
+            this.backdrop = this.withBackdrop[this.withBackdrop.length - 1].config?.backdrop ?? 0;
             break;
           case 'beforeHide':
             if (this.withBackdrop.length === 1) {
@@ -168,7 +168,7 @@
       },
     },
     created() {
-      this.$snotify.emitter.$on('snotify', (toasts: any) => {
+      this.$snotify.emitter.on('snotify', (toasts: any) => {
         this.setOptions(toasts);
       });
     }
