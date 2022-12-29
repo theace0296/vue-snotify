@@ -1,5 +1,5 @@
-export type SnotifyType
-  = 'simple'
+export type SnotifyType =
+  | 'simple'
   | 'success'
   | 'error'
   | 'warning'

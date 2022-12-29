@@ -9,7 +9,8 @@ export function uuid(): number {
  * Simple is object check.
  */
 export function isObject(item: unknown): boolean {
-  if (item && typeof item === 'object' && !Array.isArray(item) && item !== null) return true;
+  if (item && typeof item === 'object' && !Array.isArray(item) && item !== null)
+    return true;
   return false;
 }
 

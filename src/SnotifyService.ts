@@ -1,12 +1,12 @@
 import mitt from 'mitt';
-import {SnotifyToast} from './components/toast.model';
-import {TOAST_DEFAULTS} from './toastDefaults';
-import {SnotifyToastConfig, Snotify, SnotifyDefaults} from './interfaces';
-import {SnotifyStyle} from './enums';
-import {SnotifyType} from './types';
-import {TransformArgument} from './decorators/transform-argument.decorator';
-import {mergeDeep, uuid} from './utils';
-import {SetToastType} from './decorators/set-toast-type.decorator';
+import { SnotifyToast } from './components/toast.model';
+import { TOAST_DEFAULTS } from './toastDefaults';
+import { SnotifyToastConfig, Snotify, SnotifyDefaults } from './interfaces';
+import { SnotifyStyle } from './enums';
+import { SnotifyType } from './types';
+import { TransformArgument } from './decorators/transform-argument.decorator';
+import { mergeDeep, uuid } from './utils';
+import { SetToastType } from './decorators/set-toast-type.decorator';
 
 /**
  * this - create, remove, config toasts
@@ -26,7 +26,7 @@ export class SnotifyService {
    * returns SnotifyToast object
    */
   get(id: number): SnotifyToast | undefined {
-    return this.notifications.find(toast => toast.id === id);
+    return this.notifications.find((toast) => toast.id === id);
   }
 
   /**
@@ -44,11 +44,13 @@ export class SnotifyService {
   /**
    * If ID passed, emits toast animation remove, if ID & REMOVE passed, removes toast from notifications array
    */
-  remove(id?: number| string, remove?: boolean): void {
+  remove(id?: number | string, remove?: boolean): void {
     if (!id) {
       return this.clear();
     } else if (remove) {
-      this.notifications = this.notifications.filter(toast => toast.id !== id);
+      this.notifications = this.notifications.filter(
+        (toast) => toast.id !== id
+      );
       return this.emit();
     }
     this.emitter.emit('remove', id);
@@ -62,14 +64,21 @@ export class SnotifyService {
     this.emit();
   }
 
-  button(text: string, closeOnClick = true, action: (toast?: SnotifyToast) => void = () => undefined, bold = false) {
+  button(
+    text: string,
+    closeOnClick = true,
+    action: (toast?: SnotifyToast) => void = () => undefined,
+    bold = false
+  ) {
     return {
       text,
-      action: closeOnClick ? (toast: SnotifyToast) => {
-        action(toast);
-        this.remove(toast.id);
-      } : action,
-      bold
+      action: closeOnClick
+        ? (toast: SnotifyToast) => {
+          action(toast);
+          this.remove(toast.id);
+        }
+        : action,
+      bold,
     };
   }
 
@@ -77,11 +86,21 @@ export class SnotifyService {
    * Creates toast and add it to array, returns toast id
    */
   create(snotify: Snotify): SnotifyToast | undefined {
-    if (this.config.global?.oneAtTime && this.notifications.length !== 0) return;
-    if (this.config.global?.preventDuplicates
-       && this.notifications.filter(t => t.config?.type === snotify.config?.type).length === 1) return;
-    const config =
-      mergeDeep(this.config.toast, this.config.type && snotify.config?.type ? this.config.type[snotify.config.type] : undefined, snotify.config) as SnotifyToastConfig;
+    if (this.config.global?.oneAtTime && this.notifications.length !== 0)
+      return;
+    if (
+      this.config.global?.preventDuplicates &&
+      this.notifications.filter((t) => t.config?.type === snotify.config?.type)
+        .length === 1
+    )
+      return;
+    const config = mergeDeep(
+      this.config.toast,
+      this.config.type && snotify.config?.type
+        ? this.config.type[snotify.config.type]
+        : undefined,
+      snotify.config
+    ) as SnotifyToastConfig;
     const toast = new SnotifyToast(
       config.id ? config.id : uuid(),
       snotify.title ?? '',
@@ -93,7 +112,7 @@ export class SnotifyService {
   }
 
   setDefaults(defaults: SnotifyDefaults): SnotifyDefaults {
-    return this.config = mergeDeep(this.config, defaults) as SnotifyDefaults;
+    return (this.config = mergeDeep(this.config, defaults) as SnotifyDefaults);
   }
 
   /**
@@ -111,7 +130,11 @@ export class SnotifyService {
   /**
    * Create toast with simple style  returns toast id;
    */
-  simple(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
+  simple(
+    body: string,
+    title: string,
+    config: SnotifyToastConfig
+  ): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -139,7 +162,11 @@ export class SnotifyService {
   /**
    * Create toast with success style  returns toast id;
    */
-  success(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
+  success(
+    body: string,
+    title: string,
+    config: SnotifyToastConfig
+  ): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -167,7 +194,11 @@ export class SnotifyService {
   /**
    * Create toast with error style  returns toast id;
    */
-  error(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
+  error(
+    body: string,
+    title: string,
+    config: SnotifyToastConfig
+  ): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -195,7 +226,11 @@ export class SnotifyService {
   /**
    * Create toast with info style  returns toast id;
    */
-  info(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
+  info(
+    body: string,
+    title: string,
+    config: SnotifyToastConfig
+  ): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -223,7 +258,11 @@ export class SnotifyService {
   /**
    * Create toast with warning style  returns toast id;
    */
-  warning(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
+  warning(
+    body: string,
+    title: string,
+    config: SnotifyToastConfig
+  ): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -251,7 +290,11 @@ export class SnotifyService {
   /**
    * Create toast with confirm style  returns toast id;
    */
-  confirm(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
+  confirm(
+    body: string,
+    title: string,
+    config: SnotifyToastConfig
+  ): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -279,7 +322,11 @@ export class SnotifyService {
   /**
    * Create toast with Prompt style {with two buttons}, returns toast id;
    */
-  prompt(body: string, title: string, config: SnotifyToastConfig): SnotifyToast | undefined;
+  prompt(
+    body: string,
+    title: string,
+    config: SnotifyToastConfig
+  ): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -299,15 +346,28 @@ export class SnotifyService {
   /**
    * Creates async toast with Info style. Pass action, and resolve or reject it.
    */
-  async(body: string, title: string, action: () => Promise<Snotify>): SnotifyToast | undefined;
+  async(
+    body: string,
+    title: string,
+    action: () => Promise<Snotify>
+  ): SnotifyToast | undefined;
   /**
    * Creates async toast with Info style. Pass action, and resolve or reject it.
    */
-  async(body: string, action: () => Promise<Snotify>, config: SnotifyToastConfig): SnotifyToast | undefined;
+  async(
+    body: string,
+    action: () => Promise<Snotify>,
+    config: SnotifyToastConfig
+  ): SnotifyToast | undefined;
   /**
    * Creates async toast with Info style. Pass action, and resolve or reject it.
    */
-  async(body: string, title: string, action: () => Promise<Snotify>, config: SnotifyToastConfig): SnotifyToast | undefined;
+  async(
+    body: string,
+    title: string,
+    action: () => Promise<Snotify>,
+    config: SnotifyToastConfig
+  ): SnotifyToast | undefined;
   /**
    * Transform toast arguments into {Snotify} object
    */
@@ -319,13 +379,15 @@ export class SnotifyService {
   async(args) {
     const async = args.action;
     const toast = this.create(args);
-    toast?.on('mounted',
-      () => {
-        async()
-          .then((next: Snotify) => this.mergeToast(toast, next, SnotifyStyle.success))
-          .catch((error?: Snotify) => this.mergeToast(toast, error, SnotifyStyle.error));
-      }
-    );
+    toast?.on('mounted', () => {
+      async()
+        .then((next: Snotify) =>
+          this.mergeToast(toast, next, SnotifyStyle.success)
+        )
+        .catch((error?: Snotify) =>
+          this.mergeToast(toast, error, SnotifyStyle.error)
+        );
+    });
 
     return toast;
   }
@@ -339,7 +401,13 @@ export class SnotifyService {
     }
     if (next?.config) {
       if (type) {
-        toast.config = mergeDeep(toast.config, this.config.global, this.config.toast?.[type], {type}, next.config);
+        toast.config = mergeDeep(
+          toast.config,
+          this.config.global,
+          this.config.toast?.[type],
+          { type },
+          next.config
+        );
       } else {
         toast.config = mergeDeep(toast.config, next.config);
       }
@@ -360,8 +428,8 @@ export class SnotifyService {
       body: undefined,
       config: {
         ...config,
-        ...{html}
-      }
+        ...{ html },
+      },
     });
   }
 }

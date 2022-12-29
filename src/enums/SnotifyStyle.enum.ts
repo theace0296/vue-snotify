@@ -1,8 +1,8 @@
-import {SnotifyStyles} from '../interfaces';
+import { SnotifyStyles } from '../interfaces';
 /**
  * Toast style.
  */
-export const SNOTIFY_STYLE: SnotifyStyles = {
+export const SnotifyStyle: SnotifyStyles = {
   simple: 'simple',
   success: 'success',
   error: 'error',
@@ -10,5 +10,5 @@ export const SNOTIFY_STYLE: SnotifyStyles = {
   info: 'info',
   async: 'async',
   confirm: 'confirm',
-  prompt: 'prompt'
+  prompt: 'prompt',
 };

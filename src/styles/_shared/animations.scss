@@ -1,4 +1,4 @@
-$snotify-animation-name: 'fade';
+$snotify-animation-name: "fade";
 
 .snotifyToast {
   animation-fill-mode: both;
@@ -109,15 +109,23 @@ $snotify-animation-name: 'fade';
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 // Fade out
 
 @keyframes fadeOut {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes fadeOutDown {

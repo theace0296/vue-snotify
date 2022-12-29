@@ -1,4 +1,4 @@
-import {SnotifyStyle} from '../enums';
+import { SnotifyStyle } from '../enums';
 
 /**
  * Transform arguments to Snotify object
@@ -13,7 +13,7 @@ export function TransformArgument(target, propertyKey, descriptor) {
             title: null,
             body: args[0],
             config: null,
-            action: args[1]
+            action: args[1],
           };
         } else if (args.length === 3) {
           if (typeof args[1] === 'string') {
@@ -21,14 +21,14 @@ export function TransformArgument(target, propertyKey, descriptor) {
               title: args[1],
               body: args[0],
               config: null,
-              action: args[2]
+              action: args[2],
             };
           } else {
             result = {
               title: null,
               body: args[0],
               config: args[2],
-              action: args[1]
+              action: args[1],
             };
           }
         } else {
@@ -36,11 +36,11 @@ export function TransformArgument(target, propertyKey, descriptor) {
             title: args[1],
             body: args[0],
             config: args[3],
-            action: args[2]
+            action: args[2],
           };
         }
         return descriptor.value.apply(this, result);
-      }
+      },
     };
   } else {
     return {
@@ -50,25 +50,24 @@ export function TransformArgument(target, propertyKey, descriptor) {
           result = {
             title: null,
             body: args[0],
-            config: null
+            config: null,
           };
         } else if (args.length === 3) {
           result = {
             title: args[1],
             body: args[0],
-            config: args[2]
+            config: args[2],
           };
         } else {
           result = {
             title: null,
             config: null,
             body: args[0],
-            [typeof args[1] === 'string' ? 'title' : 'config']: args[1]
+            [typeof args[1] === 'string' ? 'title' : 'config']: args[1],
           };
         }
         return descriptor.value.apply(this, result);
-      }
+      },
     };
   }
-
 }

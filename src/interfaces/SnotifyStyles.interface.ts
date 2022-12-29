@@ -1,4 +1,4 @@
-import {SnotifyType} from '../types';
+import { SnotifyType } from '../types';
 
 /**
  * Toast styles

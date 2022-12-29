@@ -10,7 +10,7 @@ $snotify-icons: -generate-icons(
     warning: $snotify-warning,
     info: $snotify-info,
     success: $snotify-success,
-    async: $snotify-async
+    async: $snotify-async,
   )
 ) !default;
 
@@ -27,23 +27,23 @@ $snotify-icons: -generate-icons(
 }
 
 .snotify-icon--error {
-  background-image: url('#{map-get($snotify-icons, error)}');
+  background-image: url("#{map-get($snotify-icons, error)}");
 }
 
 .snotify-icon--warning {
-  background-image: url('#{map-get($snotify-icons, warning)}');
+  background-image: url("#{map-get($snotify-icons, warning)}");
 }
 
 .snotify-icon--info {
-  background-image: url('#{map-get($snotify-icons, info)}');
+  background-image: url("#{map-get($snotify-icons, info)}");
 }
 
 .snotify-icon--success {
-  background-image: url('#{map-get($snotify-icons, success)}');
+  background-image: url("#{map-get($snotify-icons, success)}");
 }
 
 .snotify-icon--async {
-  background-image: url('#{map-get($snotify-icons, async)}');
+  background-image: url("#{map-get($snotify-icons, async)}");
   animation: async 3s infinite linear;
   transform-origin: 50% 50%;
 }

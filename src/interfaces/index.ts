@@ -1,8 +1,8 @@
-export { Snotify } from './Snotify.interface';
-export { SnotifyAnimate } from './SnotifyAnimate.interface';
-export { SnotifyButton } from './SnotifyButton.interface';
-export { SnotifyDefaults } from './SnotifyDefaults.interface';
-export { SnotifyGlobalConfig } from './SnotifyGlobalConfig.interface';
-export { SnotifyNotifications } from './SnotifyNotifications.interface';
-export { SnotifyStyles } from './SnotifyStyles.interface';
-export { SnotifyToastConfig } from './SnotifyToastConfig.interface';
+export * from './Snotify.interface';
+export * from './SnotifyAnimate.interface';
+export * from './SnotifyButton.interface';
+export * from './SnotifyDefaults.interface';
+export * from './SnotifyGlobalConfig.interface';
+export * from './SnotifyNotifications.interface';
+export * from './SnotifyStyles.interface';
+export * from './SnotifyToastConfig.interface';

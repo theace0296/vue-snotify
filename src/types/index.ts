@@ -1,2 +1,2 @@
-export { SnotifyEvent } from './event.type';
-export { SnotifyType } from './snotify.type';
+export * from './event.type';
+export * from './snotify.type';

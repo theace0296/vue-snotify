@@ -1,4 +1,4 @@
-import {SnotifyPosition, SnotifyStyle} from './enums';
+import { SnotifyPosition, SnotifyStyle } from './enums';
 import { SnotifyDefaults } from './interfaces';
 
 /**
@@ -10,7 +10,7 @@ export const TOAST_DEFAULTS = {
     maxOnScreen: 8,
     maxAtPosition: 8,
     oneAtTime: false,
-    preventDuplicates: false
+    preventDuplicates: false,
   },
   toast: {
     type: SnotifyStyle.simple,
@@ -24,15 +24,15 @@ export const TOAST_DEFAULTS = {
     icon: undefined,
     html: undefined,
     position: SnotifyPosition.rightBottom,
-    animation: {enter: 'fadeIn', exit: 'fadeOut', time: 400}
+    animation: { enter: 'fadeIn', exit: 'fadeOut', time: 400 },
   },
   type: {
     [SnotifyStyle.prompt]: {
       timeout: 0,
       closeOnClick: false,
       buttons: [
-        {text: 'Ok', action: null, bold: true},
-        {text: 'Cancel', action: null, bold: false},
+        { text: 'Ok', action: null, bold: true },
+        { text: 'Cancel', action: null, bold: false },
       ],
       placeholder: 'Enter answer here...',
       type: SnotifyStyle.prompt,
@@ -41,32 +41,32 @@ export const TOAST_DEFAULTS = {
       timeout: 0,
       closeOnClick: false,
       buttons: [
-        {text: 'Ok', action: null, bold: true},
-        {text: 'Cancel', action: null, bold: false},
+        { text: 'Ok', action: null, bold: true },
+        { text: 'Cancel', action: null, bold: false },
       ],
       type: SnotifyStyle.confirm,
     },
     [SnotifyStyle.simple]: {
-      type: SnotifyStyle.simple
+      type: SnotifyStyle.simple,
     },
     [SnotifyStyle.success]: {
-      type: SnotifyStyle.success
+      type: SnotifyStyle.success,
     },
     [SnotifyStyle.error]: {
-      type: SnotifyStyle.error
+      type: SnotifyStyle.error,
     },
     [SnotifyStyle.warning]: {
-      type: SnotifyStyle.warning
+      type: SnotifyStyle.warning,
     },
     [SnotifyStyle.info]: {
-      type: SnotifyStyle.info
+      type: SnotifyStyle.info,
     },
     [SnotifyStyle.async]: {
       pauseOnHover: false,
       closeOnClick: false,
       timeout: 0,
       showProgressBar: false,
-      type: SnotifyStyle.async
-    }
-  }
+      type: SnotifyStyle.async,
+    },
+  },
 } as SnotifyDefaults;

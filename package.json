@@ -4,26 +4,19 @@
   "description": "A Vue.js toast notifications",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build -c vite.config.ts",
-    "build-lib": "vue-tsc --noEmit && vite build -c vite.lib.config.ts",
+    "build": "vue-tsc --noEmit && vite build -c vite.config.js",
+    "build-lib": "vue-tsc --noEmit && vite build -c vite.lib.config.js",
     "lint": "npm run lint:ts && npm run lint:scss",
     "lint:ts": "npx eslint src/**/*.ts",
     "lint:ts:fix": "npm run lint:ts -- --fix",
     "lint:scss": "stylelint src/**/*.scss",
     "lint:scss:fix": "stylelint src/**/*.scss -- --fix"
   },
-  "main": "./dist/vue-snotify.umd.js",
+  "main": "./dist/vue-snotify.cjs.js",
   "module": "./dist/vue-snotify.es.js",
   "files": [
     "dist"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/vue-snotify.es.js",
-      "require": "./dist/vue-snotify.umd.js"
-    },
-    "./style": "./dist/style.css"
-  },
   "keywords": [
     "vue",
     "vuejs",
@@ -68,6 +61,7 @@
     "vue": "^3.2.45"
   },
   "devDependencies": {
+    "@rollup/pluginutils": "^5.0.2",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "@typescript-eslint/parser": "^5.47.1",

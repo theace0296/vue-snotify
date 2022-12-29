@@ -1,4 +1,4 @@
-import {SnotifyToastConfig} from '.';
+import { SnotifyToastConfig } from './SnotifyToastConfig.interface';
 
 /**
  * Snotify toast params

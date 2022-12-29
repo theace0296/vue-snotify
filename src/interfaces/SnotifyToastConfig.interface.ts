@@ -1,6 +1,6 @@
-import {SnotifyButton, SnotifyAnimate} from '.';
-import {SnotifyType} from '../types';
-import {SnotifyPosition} from '../enums/';
+import { SnotifyButton, SnotifyAnimate } from '.';
+import { SnotifyType } from '../types';
+import { SnotifyPosition } from '../enums/';
 
 /**
  * Toast configuration object
