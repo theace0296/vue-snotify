@@ -37,6 +37,17 @@ const getFilesRecursively = (
   return files;
 };
 
+const copyFile = (src, dest) => {
+  if (fs.cpSync) {
+    return fs.cpSync(src, dest, { recursive: true, force: true });
+  } else {
+    if (!fs.existsSync(path.dirname(dest))) {
+      fs.mkdirSync(path.dirname(dest), { recursive: true });
+    }
+    fs.copyFileSync(src, dest);
+  }
+};
+
 /**
  * @param {ConfigOptions} opt
  * @returns {import('vite').PluginOption}
@@ -71,7 +82,7 @@ const copyAndTranspileSass = (opt) => {
         for (const file of files) {
           let filename = file.replace(relSourceDir, 'dist/');
           filename = opt?.formatFilePath?.(filename) || filename;
-          fs.cpSync(file, filename, { recursive: true, force: true });
+          copyFile(file, filename);
           try {
             fs.writeFileSync(filename.replace(path.extname(filename), '.css'), sass.compile(file).css, 'utf8');
           } catch (e) {
