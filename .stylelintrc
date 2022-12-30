@@ -6,6 +6,7 @@
   "rules": {
     "at-rule-no-unknown": null,
     "no-empty-source": null,
-    "number-leading-zero": "never"
+    "number-leading-zero": "never",
+    "import-notation": null
   }
 }

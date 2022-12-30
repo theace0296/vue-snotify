@@ -4,26 +4,35 @@
     :class="{ 'snotifyToast__input--filled': isPromptFocused }"
   >
     <input
-      @input="valueChanged"
+      :id="`${toast.id}`"
       class="snotifyToast__input__field"
       type="text"
-      :id="toast.id"
+      @input="valueChanged"
       @focus="isPromptFocused = true"
       @blur="isPromptFocused = !!toast.value.length"
-    />
-    <label class="snotifyToast__input__label" :for="toast.id">
+    >
+    <label
+      class="snotifyToast__input__label"
+      :for="`${toast.id}`"
+    >
       <span class="snotifyToast__input__labelContent">{{
-        truncate(toast.config.placeholder)
+        truncate(toast.config?.placeholder ?? '')
       }}</span>
     </label>
   </span>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
+import { SnotifyToast } from './toast.model';
 
 export default defineComponent({
-  props: ["toast"],
+  props: {
+    toast: {
+      type: SnotifyToast,
+      required: true
+    }
+  },
   data() {
     return {
       isPromptFocused: false,
@@ -31,10 +40,11 @@ export default defineComponent({
   },
   methods: {
     valueChanged(e) {
+      // eslint-disable-next-line vue/no-mutating-props
       this.toast.value = e.target.value;
-      this.toast.eventEmitter.$emit("input");
+      this.toast.eventEmitter.emit('input');
     },
-    truncate(value: string, limit = 40, trail = "...") {
+    truncate(value: string, limit = 40, trail = '...') {
       return value.length > limit ? value.substring(0, limit) + trail : value;
     },
   },

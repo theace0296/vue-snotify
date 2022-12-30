@@ -47,3 +47,4 @@ selenium-debug.log
 .tmp/*
 build/*
 demo-example/*
+.eslintcache

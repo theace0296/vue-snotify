@@ -39,7 +39,7 @@ export function TransformArgument(target, propertyKey, descriptor) {
             action: args[2],
           };
         }
-        return descriptor.value.apply(this, result);
+        return descriptor.value.call(this, result);
       },
     };
   } else {
@@ -66,7 +66,7 @@ export function TransformArgument(target, propertyKey, descriptor) {
             [typeof args[1] === 'string' ? 'title' : 'config']: args[1],
           };
         }
-        return descriptor.value.apply(this, result);
+        return descriptor.value.call(this, result);
       },
     };
   }

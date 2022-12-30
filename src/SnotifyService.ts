@@ -1,18 +1,43 @@
-import mitt from 'mitt';
+import mitt, { Emitter } from 'mitt';
 import { SnotifyToast } from './components/toast.model';
 import { TOAST_DEFAULTS } from './toastDefaults';
 import { SnotifyToastConfig, Snotify, SnotifyDefaults } from './interfaces';
 import { SnotifyStyle } from './enums';
 import { SnotifyType } from './types';
 import { TransformArgument } from './decorators/transform-argument.decorator';
-import { mergeDeep, uuid } from './utils';
 import { SetToastType } from './decorators/set-toast-type.decorator';
+
+/**
+ * Generates random id
+ */
+const uuid = (): number => {
+  return Math.floor(Math.random() * (Date.now() - 1)) + 1;
+};
+
+const mergeDeep = <T extends SnotifyToastConfig | SnotifyDefaults>(...args: (T | undefined)[]): T => {
+  const config = {};
+  for (const inConfig of args) {
+    if (!inConfig) {
+      continue;
+    }
+    for (const key of Object.keys(inConfig)) {
+      config[key] = inConfig[key];
+    }
+  }
+  return config as T;
+};
+
+type SnotifyEvents = {
+  snotify: SnotifyToast[]
+  remove: number | string
+  toastChanged: SnotifyToast
+};
 
 /**
  * this - create, remove, config toasts
  */
 export class SnotifyService {
-  readonly emitter = mitt();
+  readonly emitter: Emitter<SnotifyEvents> = mitt<SnotifyEvents>();
   notifications: SnotifyToast[] = [];
   config: SnotifyDefaults = TOAST_DEFAULTS;
   /**
@@ -92,17 +117,19 @@ export class SnotifyService {
       this.config.global?.preventDuplicates &&
       this.notifications.filter((t) => t.config?.type === snotify.config?.type)
         .length === 1
-    )
+    ) {
       return;
+    }
     const config = mergeDeep(
       this.config.toast,
       this.config.type && snotify.config?.type
         ? this.config.type[snotify.config.type]
         : undefined,
       snotify.config
-    ) as SnotifyToastConfig;
+    );
     const toast = new SnotifyToast(
       config.id ? config.id : uuid(),
+      uuid(),
       snotify.title ?? '',
       snotify.body ?? '',
       config
@@ -112,7 +139,7 @@ export class SnotifyService {
   }
 
   setDefaults(defaults: SnotifyDefaults): SnotifyDefaults {
-    return (this.config = mergeDeep(this.config, defaults) as SnotifyDefaults);
+    return (this.config = mergeDeep(this.config, defaults));
   }
 
   /**
@@ -381,18 +408,20 @@ export class SnotifyService {
     const toast = this.create(args);
     toast?.on('mounted', () => {
       async()
-        .then((next: Snotify) =>
-          this.mergeToast(toast, next, SnotifyStyle.success)
-        )
-        .catch((error?: Snotify) =>
-          this.mergeToast(toast, error, SnotifyStyle.error)
-        );
+        .then((next: Snotify) => {
+          toast.key = uuid();
+          this.mergeToast(toast, next, SnotifyStyle.success);
+        })
+        .catch((error?: Snotify) => {
+          toast.key = uuid();
+          this.mergeToast(toast, error, SnotifyStyle.error);
+        });
     });
 
     return toast;
   }
 
-  mergeToast(toast: Snotify, next: Snotify | undefined, type?: SnotifyType) {
+  mergeToast(toast: SnotifyToast, next: Snotify | undefined, type?: SnotifyType) {
     if (next?.body) {
       toast.body = next.body;
     }

@@ -4,11 +4,13 @@ module.exports = {
     browser: true,
     node: true,
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
-  parser: '@typescript-eslint/parser',
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:vue/vue3-recommended'],
+  parser: 'vue-eslint-parser',
   parserOptions: {
+    parser: '@typescript-eslint/parser',
     project: 'tsconfig.json',
     sourceType: 'module',
+    extraFileExtensions: ['vue']
   },
   plugins: ['@typescript-eslint'],
   root: true,

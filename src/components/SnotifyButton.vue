@@ -1,8 +1,9 @@
 <template>
   <div class="snotifyToast__buttons">
     <button
+      v-for="(button, index) in toast.config?.buttons"
+      :key="index"
       type="button"
-      v-for="button in toast.config.buttons"
       :class="[
         { 'snotifyToast__buttons--bold': button.bold },
         button.className,
@@ -15,10 +16,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
+import { SnotifyToast } from './toast.model';
 
 export default defineComponent({
-  props: ["toast"],
+  props: {
+    toast: {
+      type: SnotifyToast,
+      required: true
+    }
+  },
   methods: {
     remove() {
       this.$snotify.remove(this.toast.id);

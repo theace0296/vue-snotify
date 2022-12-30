@@ -1,63 +1,64 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
     <div
-      class="snotify-backdrop"
       v-if="backdrop >= 0"
+      class="snotify-backdrop"
       :style="{ opacity: backdrop }"
-    ></div>
+    />
     <div
       v-for="(position, index) in notifications"
+      :key="index"
       class="snotify"
       :class="'snotify-' + index"
-      :key="index"
     >
       <toast
         v-for="toast in notifications[index]?.slice(blockSize_a, blockSize_b)"
-        :toastData="toast"
-        :key="toast.id"
-        @stateChanged="stateChanged"
+        :key="`${toast.id}`"
+        :toast-data="(toast as SnotifyToast)"
+        @state-changed="stateChanged"
       />
     </div>
   </div>
 </template>
 &
 <script lang="ts">
-import { defineComponent } from "vue";
-import { SnotifyToast } from "./toast.model";
-import { SnotifyNotifications } from "../interfaces";
-import { SnotifyPosition } from "../enums";
-import { SnotifyEvent } from "../types";
-import Toast from "./SnotifyToast.vue";
+import { defineComponent } from 'vue';
+import { SnotifyToast } from './toast.model';
+import { SnotifyNotifications } from '../interfaces';
+import { SnotifyPosition } from '../enums';
+import { SnotifyEvent } from '../types';
+import Toast from './SnotifyToast.vue';
 
 interface SnotifyData {
   /**
    * Toasts array
    */
-  notifications: SnotifyNotifications;
+  notifications: SnotifyNotifications
   /**
    * Helper for slice pipe (maxOnScreen)
    */
-  dockSize_a: number | undefined;
+  dockSize_a: number | undefined
   /**
    * Helper for slice pipe (maxOnScreen)
    */
-  dockSize_b: number | undefined;
+  dockSize_b: number | undefined
   /**
    * Helper for slice pipe (maxAtPosition)
    */
-  blockSize_a: number | undefined;
+  blockSize_a: number | undefined
   /**
    * Helper for slice pipe (maxAtPosition)
    */
-  blockSize_b: number | undefined;
+  blockSize_b: number | undefined
   /**
    * Backdrop Opacity
    */
-  backdrop: number;
+  backdrop: number
   /**
    * How many toasts with backdrop in current queue
    */
-  withBackdrop: SnotifyToast[];
+  withBackdrop: SnotifyToast[]
 }
 
 export default defineComponent({
@@ -108,6 +109,11 @@ export default defineComponent({
       withBackdrop: [],
     };
   },
+  created() {
+    this.$snotify.emitter.on('snotify', (toasts) => {
+      this.setOptions(toasts);
+    });
+  },
   methods: {
     setOptions(toasts: SnotifyToast[]): void {
       if (this.$snotify.config?.global?.newOnTop) {
@@ -136,7 +142,7 @@ export default defineComponent({
       this.notifications = this.splitToasts(
         toasts.slice(this.dockSize_a, this.dockSize_b)
       );
-      this.stateChanged("mounted");
+      this.stateChanged('mounted');
     },
 
     // TODO: fix backdrop if more than one toast called in a row
@@ -151,22 +157,22 @@ export default defineComponent({
         return;
       }
       switch (event) {
-        case "mounted":
+        case 'mounted':
           if (this.backdrop < 0) {
             this.backdrop = 0;
           }
           break;
-        case "beforeShow":
+        case 'beforeShow':
           this.backdrop =
             this.withBackdrop[this.withBackdrop.length - 1].config?.backdrop ??
             0;
           break;
-        case "beforeHide":
+        case 'beforeHide':
           if (this.withBackdrop.length === 1) {
             this.backdrop = 0;
           }
           break;
-        case "hidden":
+        case 'hidden':
           if (this.withBackdrop.length === 1) {
             this.backdrop = -1;
           }
@@ -181,7 +187,7 @@ export default defineComponent({
       const result = {};
 
       for (const property in SnotifyPosition) {
-        if (SnotifyPosition.hasOwnProperty(property)) {
+        if (Object.prototype.hasOwnProperty.call(SnotifyPosition, property)) {
           result[SnotifyPosition[property]] = [];
         }
       }
@@ -192,11 +198,6 @@ export default defineComponent({
 
       return result;
     },
-  },
-  created() {
-    this.$snotify.emitter.on("snotify", (toasts: any) => {
-      this.setOptions(toasts);
-    });
   },
 });
 </script>

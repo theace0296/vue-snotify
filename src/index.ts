@@ -9,6 +9,7 @@ export const SNotify = {
     const service = new SnotifyService();
     service.setDefaults(options);
     app.config.globalProperties.$snotify = service;
+    // eslint-disable-next-line vue/component-definition-name-casing
     app.component('vue-snotify', Snotify);
   },
 };

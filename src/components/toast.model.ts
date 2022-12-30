@@ -25,6 +25,7 @@ export class SnotifyToast {
   valid: boolean | undefined = undefined;
   constructor(
     public id: number | string,
+    public key: number | string,
     public title: string,
     public body: string,
     public config?: SnotifyToastConfig
