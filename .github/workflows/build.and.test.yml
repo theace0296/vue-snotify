@@ -23,7 +23,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
+    - run: npm install
     - run: npm run lint:ts
     - run: npm run build
     - run: npm test
@@ -36,4 +36,4 @@ jobs:
         path: ${{ github.workspace }}/dist/**/*
         if-no-files-found: error
         retention-days: 7
-    
+
