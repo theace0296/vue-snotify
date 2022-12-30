@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite -c vite.config.ts",
     "build": "vue-tsc --noEmit && vite build -c vite.config.ts",
-    "build-lib": "vue-tsc --noEmit && vite build -c vite.lib.config.ts",
+    "build:lib": "vue-tsc --noEmit && vite build -c vite.lib.config.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage",
@@ -17,6 +17,7 @@
   },
   "main": "./dist/vue-snotify.cjs.js",
   "module": "./dist/vue-snotify.es.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/vue-snotify.es.js",
@@ -88,6 +89,7 @@
     "stylelint-scss": "^4.3.0",
     "typescript": "^4.9.4",
     "vite": "^4.0.3",
+    "vite-plugin-dts": "^1.7.1",
     "vitest": "^0.26.2",
     "vue-tsc": "^1.0.18"
   }

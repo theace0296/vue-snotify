@@ -48,3 +48,4 @@ selenium-debug.log
 build/*
 demo-example/*
 .eslintcache
+vue-snotify-*.tgz
