@@ -14,14 +14,35 @@ const uuid = (): number => {
   return Math.floor(Math.random() * (Date.now() - 1)) + 1;
 };
 
-const mergeDeep = <T extends SnotifyToastConfig | SnotifyDefaults>(...args: (T | undefined)[]): T => {
+const mergeDeep = <T extends SnotifyToastConfig | SnotifyDefaults>(
+  ...args: (T | undefined)[]
+): T => {
   const config = {};
   for (const inConfig of args) {
     if (!inConfig) {
       continue;
     }
     for (const key of Object.keys(inConfig)) {
-      config[key] = inConfig[key];
+      if (
+        typeof config[key] === 'object' &&
+        typeof inConfig[key] === 'object'
+      ) {
+        if (
+          !config[key] ||
+          !inConfig[key] ||
+          Array.isArray(config[key]) ||
+          Array.isArray(inConfig[key])
+        ) {
+          config[key] = inConfig[key];
+        } else {
+          config[key] = {
+            ...config[key],
+            ...inConfig[key],
+          };
+        }
+      } else {
+        config[key] = inConfig[key];
+      }
     }
   }
   return config as T;
@@ -421,7 +442,11 @@ export class SnotifyService {
     return toast;
   }
 
-  mergeToast(toast: SnotifyToast, next: Snotify | undefined, type?: SnotifyType) {
+  mergeToast(
+    toast: SnotifyToast,
+    next: Snotify | undefined,
+    type?: SnotifyType
+  ) {
     if (next?.body) {
       toast.body = next.body;
     }

@@ -3,13 +3,26 @@ import App from '../App.vue';
 import VueSnotify from '..';
 
 describe('App.vue', () => {
-  test('mount component', () => {
+  it('should mount component', () => {
     expect(App).toBeTruthy();
     const wrapper = mount(App, {
       global: {
-        plugins: [VueSnotify]
-      }
+        plugins: [VueSnotify],
+      },
     });
     expect(wrapper.html()).toMatchSnapshot();
+  });
+  it('should set default options app', () => {
+    const wrapper = mount(App, {
+      global: {
+        plugins: [VueSnotify],
+      },
+    });
+    wrapper.vm.$snotify.setDefaults({
+      toast: {
+        timeout: 5000,
+      },
+    });
+    expect(wrapper.vm.$snotify.config.toast?.timeout).toBe(5000);
   });
 });
