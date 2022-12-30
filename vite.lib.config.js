@@ -23,7 +23,8 @@ export default defineConfig({
   plugins: [
     vue(),
     copyAndTranspileSass({
-      entry: path.resolve(__dirname, 'src/styles')
+      entry: path.resolve(__dirname, 'src'),
+      include: [/styles\/\w+\.scss$/]
     })
   ],
   server: {

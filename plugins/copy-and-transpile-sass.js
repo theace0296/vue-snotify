@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const { normalizePath } = require('vite');
 const { createFilter } = require('@rollup/pluginutils');
 const sass = require('sass');
@@ -13,16 +14,43 @@ const sass = require('sass');
  */
 
 /**
+ * @param {string} dir
+ * @param {(dir: string) => boolean} [filter]
+ * @param {(dir: string) => string} [transform]
+ */
+const getFilesRecursively = (
+  dir,
+  filter = () => true,
+  transform = (s) => s
+) => {
+  if (!dir) {
+    return [];
+  }
+  const files = [];
+  if (fs.lstatSync(dir).isDirectory()) {
+    fs.readdirSync(dir).forEach((f) => {
+      files.push(...getFilesRecursively(path.join(dir, f), filter, transform));
+    });
+  } else if (filter(dir)) {
+    files.push(transform(dir));
+  }
+  return files;
+};
+
+/**
  * @param {ConfigOptions} opt
  * @returns {import('vite').PluginOption}
  */
 const copyAndTranspileSass = (opt) => {
-  const maps = new Map();
   let root = opt?.root || process.cwd();
   const entry = opt?.entry || 'src';
   let sourceDir = normalizePath(path.resolve(root, entry));
+  let relSourceDir = normalizePath(path.relative(root, sourceDir));
   const include = opt?.include || [/\.(less|scss|css)$/];
   const exclude = opt?.exclude || [/node_modules/];
+  const filter = createFilter(include, exclude);
+  let generated = false;
+
   return {
     name: 'vite-plugin-copy-and-transpile-sass',
     enforce: 'pre',
@@ -30,23 +58,27 @@ const copyAndTranspileSass = (opt) => {
     configResolved: (config) => {
       root = opt?.root || config.root || process.cwd();
       sourceDir = normalizePath(path.resolve(root, entry));
-    },
-    transform(code, id) {
-      const filter = createFilter(include, exclude);
-      if (!filter(id)) return;
-      maps.set(id, code);
-      return code;
+      relSourceDir = normalizePath(path.relative(root, sourceDir));
     },
     generateBundle() {
-      maps.forEach((code, id) => {
-        let filename = id.replace(sourceDir, '').substring(1);
-        filename = opt?.formatFilePath?.(filename) || filename;
-        this.emitFile({
-          type: 'asset',
-          fileName: filename,
-          source: code,
-        });
-      });
+      if (!generated) {
+        generated = true;
+        const files = getFilesRecursively(
+          sourceDir,
+          (str) => filter(str),
+          (str) => normalizePath(path.relative(process.cwd(), str))
+        );
+        for (const file of files) {
+          let filename = file.replace(relSourceDir, 'dist/');
+          filename = opt?.formatFilePath?.(filename) || filename;
+          fs.cpSync(file, filename, { recursive: true, force: true });
+          try {
+            fs.writeFileSync(filename.replace(path.extname(filename), '.css'), sass.compile(file).css, 'utf8');
+          } catch (e) {
+            console.warn(e);
+          }
+        }
+      }
     },
   };
 };
