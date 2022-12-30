@@ -47,5 +47,6 @@ selenium-debug.log
 .tmp/*
 build/*
 demo-example/*
+coverage/*
 .eslintcache
 vue-snotify-*.tgz
