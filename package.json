@@ -1,6 +1,6 @@
 {
   "name": "@theace0296/vue-snotify",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A Vue.js toast notifications",
   "scripts": {
     "dev": "vite -c vite.config.ts",
