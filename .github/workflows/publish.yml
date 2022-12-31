@@ -3,6 +3,17 @@ name: Publish to GitHub Packages and NPM
 on:
   workflow_dispatch:
 
+# Sets permissions of the GITHUB_TOKEN to allow publish to GitHub Packages
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+# Allow one concurrent publish
+concurrency:
+  group: "publish"
+  cancel-in-progress: true
+
 jobs:
   publish-gpr:
     runs-on: ubuntu-latest
