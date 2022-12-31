@@ -9,6 +9,10 @@ export default defineConfig(env => {
     plugins: [vue()],
   };
 
+  if (env.mode === 'production') {
+    config.base = '/vue-snotify/';
+  }
+
   if (env.mode === 'test') {
     config.test = {
       globals: true,

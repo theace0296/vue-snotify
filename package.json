@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite -c vite.config.ts",
     "build": "vue-tsc --noEmit && vite build -c vite.config.ts",
+    "preview": "vue-tsc --noEmit && vite preview -c vite.config.ts",
     "build:lib": "vue-tsc --noEmit && vite build -c vite.lib.config.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",

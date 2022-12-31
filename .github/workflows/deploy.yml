@@ -1,0 +1,28 @@
+name: Deploy Site
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    - run: npm install
+    - run: npm run build
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: github-pages
+        path: ${{ github.workspace }}/dist/**/*
+        if-no-files-found: error
+        retention-days: 7
+    - name: Deploy GitHub Pages site
+      uses: actions/deploy-pages@v1.2.3
