@@ -1,6 +1,6 @@
 {
   "name": "@theace0296/vue-snotify",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "A Vue.js toast notifications",
   "scripts": {
     "dev": "vite -c vite.config.ts",
@@ -18,6 +18,13 @@
   },
   "main": "./dist/vue-snotify.cjs.js",
   "module": "./dist/vue-snotify.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-snotify.es.js",
+      "require": "./dist/vue-snotify.cjs.js"
+    },
+    "./dist/*": "./dist/*"
+  },
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
