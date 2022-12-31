@@ -103,7 +103,7 @@ exports[`App.vue > should mount component 1`] = `
       </div>
     </main>
     <footer>
-      <div class=\\"footer\\"><a href=\\"https://github.com/theace0296/vue-snotify\\" target=\\"_blank\\">GitHub</a> ◉ <a href=\\"https://www.npmjs.com/package/vue-snotify\\" target=\\"_blank\\">NPM</a>
+      <div class=\\"footer\\"><a href=\\"https://github.com/theace0296/vue-snotify\\" target=\\"_blank\\">GitHub</a> ◉ <a href=\\"https://www.npmjs.com/package/@theace0296/vue-snotify\\" target=\\"_blank\\">NPM</a>
         <h6>MIT</h6>
       </div>
     </footer>

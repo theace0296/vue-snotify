@@ -1,4 +1,4 @@
-# vue-snotify
+# @theace0296/vue-snotify
 
 This is a fork of the original [vue-snotify](https://github.com/artemsky/vue-snotify), updated to be used with Vue 3. All of the original API and functionality remains, just with some modernization of the source and reference application (it uses Vite!).
 
@@ -21,11 +21,11 @@ https://theace0296.github.io/vue-snotify/
 
 ## Installation
 
-###### NPM 5
-`npm install vue-snotify`
+###### NPM
+`npm install @theace0296/vue-snotify`
 
 ###### yarn
-`yarn add vue-snotify`
+`yarn add @theace0296/vue-snotify`
 
 ## License
 

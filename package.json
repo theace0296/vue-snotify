@@ -1,5 +1,5 @@
 {
-  "name": "vue-snotify",
+  "name": "@theace0296/vue-snotify",
   "version": "4.0.0",
   "description": "A Vue.js toast notifications",
   "scripts": {
@@ -49,7 +49,9 @@
     "notification-center",
     "snotify",
     "vue-snotify",
+    "@theace0296/vue-snotify",
     "vue3-snotify",
+    "@theace0296/vue3-snotify",
     "vuejs notifications",
     "vue notifications",
     "vue toater"

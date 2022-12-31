@@ -348,7 +348,7 @@
           >GitHub</a>
           &#9673;
           <a
-            href="https://www.npmjs.com/package/vue-snotify"
+            href="https://www.npmjs.com/package/@theace0296/vue-snotify"
             target="_blank"
           >NPM</a>
           <h6>MIT</h6>
