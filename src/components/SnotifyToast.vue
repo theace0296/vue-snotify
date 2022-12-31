@@ -127,17 +127,8 @@ export default defineComponent({
     };
   },
   created() {
-    this.$snotify.emitter.on('toastChanged', (toast) => {
-      if (this.toast.id === toast?.id) {
-        this.$forceUpdate();
-        this.initToast();
-      }
-    });
-    this.$snotify.emitter.on('remove', (id) => {
-      if (this.toast.id === id) {
-        this.onRemove();
-      }
-    });
+    this.$snotify.emitter.on('toastChanged', this.onChanged);
+    this.$snotify.emitter.on('remove', this.onRemove);
   },
   mounted() {
     this.$nextTick(() => {
@@ -153,6 +144,8 @@ export default defineComponent({
     });
   },
   unmounted() {
+    this.$snotify.emitter.off('toastChanged', this.onChanged);
+    this.$snotify.emitter.off('remove', this.onRemove);
     cancelAnimationFrame(this.animationFrame ?? -1);
     this.toast.eventEmitter.emit('destroyed');
   },
@@ -224,9 +217,21 @@ export default defineComponent({
       calculate();
     },
     /**
+     * Trigger onChanged, updates toast
+     */
+    onChanged(toast: SnotifyToast) {
+      if (this.toast.id === toast?.id) {
+        this.$forceUpdate();
+        this.initToast();
+      }
+    },
+    /**
      * Trigger beforeDestroy lifecycle. Removes toast
      */
-    onRemove() {
+    onRemove(id: string | number) {
+      if (this.toast.id !== id) {
+        return;
+      }
       this.state.isDestroying = true;
       this.$emit('state-changed', 'beforeHide');
       this.toast.eventEmitter.emit('beforeHide');
