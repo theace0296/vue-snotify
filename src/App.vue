@@ -627,7 +627,6 @@ export default defineComponent({
     flex: 0 0 350px;
     padding: 10px 15px;
     overflow-y: auto;
-    z-index: 99999;
     background-color: #fff;
     .btn-group {
       .btn {
